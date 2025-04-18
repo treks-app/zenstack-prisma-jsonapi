@@ -14,6 +14,16 @@ Autogenerates a REST API (JSONAPI) from prisma schema with ACL.
 * [ ] Add Zod validation
 * [ ] Generate OpenAPI spec
 
+## API Features
+
+* /api/model/post - list all posts
+* /api/model/post/1 - show post id=1
+* /api/model/post?filter[title]=Hello%20World - Get post with title "Hello World"
+* /api/model/post?filter[content$contains]=word - find Post.content that contain "word"
+
+Full list of features - https://zenstack.dev/docs/reference/server-adapters/api-handlers/rest#filtering
+
+
 ## Docs
 
 * https://zenstack.dev/docs/reference/server-adapters/api-handlers/rest
