@@ -11,5 +11,5 @@ Autogenerates a REST API (JSONAPI) from prisma schema with ACL.
 
 ## Todo
 
-* [] Add Zod validation
-* [] Generate OpenAPI spec
+* [ ] Add Zod validation
+* [ ] Generate OpenAPI spec
