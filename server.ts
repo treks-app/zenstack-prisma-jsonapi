@@ -1,35 +1,45 @@
+import Fastify from 'fastify';
 import { enhance } from '@zenstackhq/runtime';
 import { ZenStackFastifyPlugin } from '@zenstackhq/server/fastify';
 import { getSessionUser } from './auth.ts';
-import Fastify from 'fastify'
 import { prisma } from './prisma/prisma-client';
 import { RestApiHandler } from '@zenstackhq/server/api';
+import fs from 'fs';
 
-const fastify = Fastify({
-  logger: true
-})
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUI from '@fastify/swagger-ui';
 
-// development
-const endpoint = 'http://localhost:3000/api/model'
+const fastify = Fastify({ logger: true });
 
-// serve OpenAPI at /api/model
-fastify.register(ZenStackFastifyPlugin, {
-    prefix: '/api/model',
-    // getSessionUser extracts the current session user from the request, its
-    // implementation depends on your auth solution
-    getPrisma: (request) => enhance(prisma, { user: getSessionUser(request) }),
-    handler: (req) => {
-      // base url for RESTful resource linkage
-      const handler = RestApiHandler({ 
-        endpoint
-      })
-      return handler(req)
-    },
-    zodSchemas: true
+const main = async () => {
+  // Register swagger
+await fastify.register(fastifySwagger);
+
+// Register Swagger UI
+await fastify.register(fastifySwaggerUI, {
+  routePrefix: '/docs',
+  uiConfig: {
+    docExpansion: 'list',
+    deepLinking: false,
+  },
 });
 
-fastify.listen({ port: 3000 })
-  .catch(err => {
-    fastify.log.error(err)
-    process.exit(1)
-  })
+// Register ZenStack REST API
+await fastify.register(ZenStackFastifyPlugin, {
+  prefix: '/api/model',
+  getPrisma: (request) => enhance(prisma, { user: getSessionUser(request) }),
+  handler: (req) => {
+    const handler = RestApiHandler({ endpoint: 'http://localhost:3000/api/model' });
+    return handler(req);
+  },
+  zodSchemas: true,
+});
+
+// Start the server
+fastify.listen({ port: 3000 }).catch((err) => {
+  fastify.log.error(err);
+  process.exit(1);
+});
+}
+
+main()
