@@ -13,3 +13,8 @@ Autogenerates a REST API (JSONAPI) from prisma schema with ACL.
 
 * [ ] Add Zod validation
 * [ ] Generate OpenAPI spec
+
+## Docs
+
+* https://zenstack.dev/docs/reference/server-adapters/api-handlers/rest
+* https://zenstack.dev/docs/reference/server-adapters/fastify
