@@ -17,7 +17,8 @@ fastify.register(ZenStackFastifyPlugin, {
     getPrisma: (request) => enhance(prisma, { user: getSessionUser(request) }),
     handler: RestApiHandler({ 
       endpoint: 'http://localhost:3000/api/model' 
-    })
+    }),
+    zodSchemas: true
 });
 
 fastify.listen({ port: 3000 })
